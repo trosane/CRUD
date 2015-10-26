@@ -26,10 +26,11 @@
 	text-align: center;
 }
 
-img {
+#album {
 	border: outset;
 	border-radius: 15px;
 	max-width: 100%;
+	min-width: 150px;
 }
 
 form {
@@ -53,4 +54,8 @@ body {
 .title {
 	margin-bottom: 0;
 	margin-top: 5px;
+}
+
+#header p {
+	text-align: center;
 }

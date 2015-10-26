@@ -1,7 +1,7 @@
 
 $(document).ready(function(){
     Parse.initialize("xRcpayJ1Hgmw3n9hQJTdA43Igz9r2KlQC9I4QcfK", "rLl6JFzFA7C6Qbc9DUIyeTGbh8LDpeAGTh6h6Sz1");
-
+    $('#stars').raty({ 'score': 3, 'path': '/raty/lib/images'});
 var Review = Parse.Object.extend("Review");
 
 $('form').submit(function() {
