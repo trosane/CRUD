@@ -93,3 +93,7 @@ body {
 	clear: right;
 	margin-top: 0.25em;
 }
+
+.comment {
+	font-size: 1.2em;
+}

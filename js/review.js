@@ -4,8 +4,11 @@ $(document).ready(function(){
     
     var starCount = 0; //counts total number of given stars
   	var numReviews = 0; //counts total number of reviews
+  	// initializes the stars for the submission form
     $('#review-rating').raty({ 'path': '/raty/lib/images' });
 	var Review = Parse.Object.extend("Review");
+
+// handles the form submit and sets values in the parse database
 
 	$('form').submit(function() {
 		var review = new Review();
@@ -18,12 +21,47 @@ $(document).ready(function(){
 
 		review.set('rating', rating);
 
+		review.set('upvote', 0);
+		review.set('downvote', 0);
+
+		date = timeStamp();
+		review.set('date', date);
+
 		review.save(null, function() {
 			success:getData()
 		});
 
 		return false;
 	})
+
+//deals with votes and deleting posts
+
+	$(document).on('click', '.glyphicon', function() {
+		var id = $(this).attr("id");
+		if($(this).hasClass( "glyphicon-arrow-up" )) {
+			getObject(id, 'upvote');
+		} else if ($(this).hasClass( "glyphicon-arrow-down" )) {
+			getObject(id, 'downvote');
+		} else {
+			console.log('deleted');
+		}
+	});
+
+// grabs the corresponding review depending on which interactive button is clicked
+// and updates the page to reflect the changes.
+
+	var getObject = function(id, voteType) {
+		var query = new Parse.Query(Review);
+ 		query.get(id, {
+ 			success: function(response) {
+ 				var count = response.get(voteType);
+ 				response.set(voteType, count + 1);
+ 				response.save(null, function() {
+ 					success: getData()
+ 				});
+ 			}
+ 		});
+	 }
 
 	var getData = function() {
 		var query = new Parse.Query(Review);
@@ -36,7 +74,7 @@ $(document).ready(function(){
 	}
 
 	var buildList = function(data) {
-		//$('#reviews').empty();
+		$('#reviews').empty();
 		numReviews = 0;
 		data.forEach(function(d) {
 			addItem(d);
@@ -54,7 +92,10 @@ $(document).ready(function(){
 		var comment = item.get("comment");
 		var rating = item.get("rating");
 		var id = item.id;
-		var date = timeStamp();
+		var upCount = item.get("upvote");
+		var downCount = item.get("downvote");
+		var total = upCount + downCount;
+		var date = item.get("date");
 		starCount += rating;
 		numReviews++;
 
@@ -62,14 +103,12 @@ $(document).ready(function(){
 		var titleText = '<h2 id="title' + id + '" class="title"></h2>';
 		var timestamp = '<p class="date">' + date + '</p>';
 		var commentText = '<p id="comment' + id + '" class="comment"></p>';
-		var upvote = '<span class="glyphicon glyphicon-arrow-up"></span>'
-		var downvote = '<span class="glyphicon glyphicon-arrow-down"></span>'
-		var votes = '<p class="vote">votes</p>';
-		var reviewDiv = $('<div class="panel panel-default" id="review-block">' + titleText + 
-			stars + timestamp + commentText + votes + '</div>');
-
-
-
+		var upvoteArrow = '<span class="glyphicon glyphicon-arrow-up" id="' + id + '"></span>'
+		var downvoteArrow = '<span class="glyphicon glyphicon-arrow-down" id="' + id + '"></span>'
+		var votes = '<p class="vote">' + upCount + ' out of ' + total + ' found this review helpful</p>';
+		var reviewDiv = $('<div class="panel panel-default col-xs-12 col-md-12" id="review-block"><div class="col-xs-10 col-md-10">' 
+			+ titleText + stars + timestamp + commentText + votes + '</div><div class="col-xs-2 col-md-2" id="vote-arrow">' + upvoteArrow
+			+ downvoteArrow + '</div></div>');
 
 
 		$('#reviews').append(reviewDiv);
@@ -79,6 +118,7 @@ $(document).ready(function(){
 
 	}
 
+// function that returns a timestamp in a nice format
 	var timeStamp = function() {
 		// Create a date object with the current time
 		  var now = new Date();
