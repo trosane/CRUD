@@ -29,10 +29,11 @@
 						<h1>Every Open Eye</h1>
 						<img id="album" src="img/album.jpg" alt="album of chvrches every open eye">
 					</div>
-					<div class="col-xs-9 col-md-6">
-						<p>Average Rating</p>
-						<div id="stars"></div>
+					<div class="col-xs-12 col-md-6">
+						<p id="avg-title">Average Rating</p>
+						<div id="avg-rating"></div>
 						<p>Every Open Eye is the second studio album by Scottish synthpop band CHVRCHES, released on 25 September 2015. Self-produced, it is the band's follow-up to their critically acclaimed debut, The Bones of What You Believe (2013). The album title comes from a lyric in the song "Clearest Blue".</p>
+
 					</div>
 				</div>
 			</div>
@@ -42,7 +43,12 @@
 			<div class="container" id="review-form">
 				<div class="row">
 					<div class="col-md-12">
+					<h2>Write a review:</h2>
 						<form role="form">
+							<div class="form-group">
+								<label for="review-rating">Rating:</label>
+								<div id="review-rating">
+							</div>
 							<div class="form-group">
 								<label for="title">Title:</label>
 								<input type="text" class="form-control" id="title-area" placeholder="a title for your review">
@@ -57,12 +63,22 @@
 				</div>
 			</div>
 
+			<h2 id="review-head">Reviews</h2>
 			<div class="container" id="reviews">
-				<h1>Reviews</h1>
 				<div class="row">
-					<div class="col-md-12">
-						
-					</div>
+						<div class="panel panel-default col-xs-12 col-md-12" id="review-block">
+							<div class="col-xs-10 col-md-10">
+								<h2 id="titlesLxmXwi6Dz" class="title">a</h2>
+								<p class="date">10/26/2015 9:25:52 PM</p>
+								<p id="commentsLxmXwi6Dz" class="comment">a</p>
+								<p class="vote">votes</p>
+							</div>
+
+							<div class="col-xs-2 col-md-2" id="vote-arrow">
+								<span class="glyphicon glyphicon-arrow-up"></span>
+								<span class="glyphicon glyphicon-arrow-down"></span>
+							</div>
+						</div>
 				</div>
 			</div>
 		</div>
