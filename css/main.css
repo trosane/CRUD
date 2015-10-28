@@ -94,6 +94,14 @@ body {
 	margin-top: 0.25em;
 }
 
+.glyphicon-remove-circle {
+	font-size: 1.5em;
+	float: right;
+	clear: right;
+	margin-top: 0.75em;
+	color: #885261;
+}
+
 .comment {
 	font-size: 1.2em;
 }

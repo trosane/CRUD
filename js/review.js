@@ -39,11 +39,14 @@ $(document).ready(function(){
 	$(document).on('click', '.glyphicon', function() {
 		var id = $(this).attr("id");
 		if($(this).hasClass( "glyphicon-arrow-up" )) {
+			$(this).css('color', '#885261');
 			getObject(id, 'upvote');
 		} else if ($(this).hasClass( "glyphicon-arrow-down" )) {
+			$(this).css('color', '#885261');
 			getObject(id, 'downvote');
 		} else {
-			console.log('deleted');
+			$(this).css('color', '#41081F');
+			getObject(id, null);
 		}
 	});
 
@@ -54,8 +57,12 @@ $(document).ready(function(){
 		var query = new Parse.Query(Review);
  		query.get(id, {
  			success: function(response) {
- 				var count = response.get(voteType);
- 				response.set(voteType, count + 1);
+ 				if (voteType) {
+	 				var count = response.get(voteType);
+	 				response.set(voteType, count + 1);
+	 			} else {
+	 				response.destroy();
+	 			}
  				response.save(null, function() {
  					success: getData()
  				});
@@ -106,9 +113,10 @@ $(document).ready(function(){
 		var upvoteArrow = '<span class="glyphicon glyphicon-arrow-up" id="' + id + '"></span>'
 		var downvoteArrow = '<span class="glyphicon glyphicon-arrow-down" id="' + id + '"></span>'
 		var votes = '<p class="vote">' + upCount + ' out of ' + total + ' found this review helpful</p>';
+		var deleteIcon = '<span class="glyphicon glyphicon-remove-circle" id="' + id + '"></span>'
 		var reviewDiv = $('<div class="panel panel-default col-xs-12 col-md-12" id="review-block"><div class="col-xs-10 col-md-10">' 
 			+ titleText + stars + timestamp + commentText + votes + '</div><div class="col-xs-2 col-md-2" id="vote-arrow">' + upvoteArrow
-			+ downvoteArrow + '</div></div>');
+			+ downvoteArrow + deleteIcon + '</div></div>');
 
 
 		$('#reviews').append(reviewDiv);
