@@ -12,21 +12,20 @@ $(document).ready(function(){
 
 	$('form').submit(function() {
 		var review = new Review();
-
+	// sets titles and comments in Parse
 		review.set('title', $("#title-area").val());
 		review.set('comment', $("#comment-area").val());
-		
+	// sets ratings as an integer in Parse
 		var rating = $('#review-rating').raty('score');
 		rating = parseInt(rating);
-
 		review.set('rating', rating);
-
+	// sets votes in Parse to initialize them
 		review.set('upvote', 0);
 		review.set('downvote', 0);
-
+	// sets the time in Parse
 		date = timeStamp();
 		review.set('date', date);
-
+	// saves the data to the Parse database
 		review.save(null, function() {
 			success:getData()
 		});
@@ -57,18 +56,21 @@ $(document).ready(function(){
 		var query = new Parse.Query(Review);
  		query.get(id, {
  			success: function(response) {
- 				if (voteType) {
+ 				if (voteType) { // if the vote arrows were clicked
 	 				var count = response.get(voteType);
 	 				response.set(voteType, count + 1);
-	 			} else {
+	 			} else { // if the delete button was clicked
 	 				response.destroy();
 	 			}
+	 			// goes through and reloads the data on the page to reflect the changes
  				response.save(null, function() {
  					success: getData()
  				});
  			}
  		});
 	 }
+
+// fetches the data from the Parse database
 
 	var getData = function() {
 		var query = new Parse.Query(Review);
@@ -80,21 +82,21 @@ $(document).ready(function(){
 		});
 	}
 
+// goes through each review in the database and sets up the div to post to the page
+
 	var buildList = function(data) {
-		$('#reviews').empty();
-		numReviews = 0;
+		$('#reviews').empty(); // empties the reviews from the page to prevent copies
+		numReviews = 0; // initilaizes the count of reviews for average calculation
 		data.forEach(function(d) {
 			addItem(d);
 		});
-		console.log('Star count: ' + starCount);
 		var average = starCount / numReviews;
-		console.log('Average: ' + average);
-		console.log('NumReviews: ' + numReviews);
 		starCount = 0;
 		$('#avg-rating').raty({ 'score': average, 'path': '/raty/lib/images', 'readOnly': true });
 	}
 
 	var addItem = function(item) {
+	// gets all the needed data from the Parse database
 		var title = item.get("title");
 		var comment = item.get("comment");
 		var rating = item.get("rating");
@@ -103,9 +105,12 @@ $(document).ready(function(){
 		var downCount = item.get("downvote");
 		var total = upCount + downCount;
 		var date = item.get("date");
+
+	// increments the total stars and the number of reviews for average calculation
 		starCount += rating;
 		numReviews++;
 
+	// sets up the html elements and combines them to form the review block
 		var stars = '<div id="' + id + '"></div>'
 		var titleText = '<h2 id="title' + id + '" class="title"></h2>';
 		var timestamp = '<p class="date">' + date + '</p>';
@@ -118,10 +123,11 @@ $(document).ready(function(){
 			+ titleText + stars + timestamp + commentText + votes + '</div><div class="col-xs-2 col-md-2" id="vote-arrow">' + upvoteArrow
 			+ downvoteArrow + deleteIcon + '</div></div>');
 
-
+	// adds the review block to the page and fills in the user input to prevent XSS
 		$('#reviews').append(reviewDiv);
 		$('#title' + id).text(title);
 		$('#comment' + id).text(comment);
+	// sets up the star rating for each review
 		$('#' + id).raty({ 'score': rating, 'path': '/raty/lib/images', 'readOnly': true });
 
 	}
