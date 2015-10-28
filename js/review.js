@@ -5,7 +5,7 @@ $(document).ready(function(){
     var starCount = 0; //counts total number of given stars
   	var numReviews = 0; //counts total number of reviews
   	// initializes the stars for the submission form
-    $('#review-rating').raty({ 'path': '/raty/lib/images' });
+    $('#review-rating').raty({ 'path': 'raty/lib/images' });
 	var Review = Parse.Object.extend("Review");
 
 // handles the form submit and sets values in the parse database
@@ -92,7 +92,7 @@ $(document).ready(function(){
 		});
 		var average = starCount / numReviews;
 		starCount = 0;
-		$('#avg-rating').raty({ 'score': average, 'path': '/raty/lib/images', 'readOnly': true });
+		$('#avg-rating').raty({ 'score': average, 'path': 'raty/lib/images', 'readOnly': true });
 	}
 
 	var addItem = function(item) {
@@ -128,7 +128,7 @@ $(document).ready(function(){
 		$('#title' + id).text(title);
 		$('#comment' + id).text(comment);
 	// sets up the star rating for each review
-		$('#' + id).raty({ 'score': rating, 'path': '/raty/lib/images', 'readOnly': true });
+		$('#' + id).raty({ 'score': rating, 'path': 'raty/lib/images', 'readOnly': true });
 
 	}
 
